@@ -17,7 +17,9 @@ export class Segment {
 		return this._end;
 	}
 
-    length(): number {
-        return Math.sqrt((this._end.x() - this._start.x()) ** 2 + (this._end.y() - this._start.y()) ** 2);
-    }
+	length(): number {
+		return Math.sqrt(
+			(this._end.x() - this._start.x()) ** 2 + (this._end.y() - this._start.y()) ** 2,
+		);
+	}
 }

@@ -1,20 +1,38 @@
 {
   "name": "abstract-rotary-tool",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "version": "0.0.1",
+  "description": "A lightweight TypeScript library for 2D box geometry with rotation and reflection support",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
   "scripts": {
+    "build": "tsc",
+    "prepare": "npm run build",
     "test": "jest",
     "lint": "biome check src/",
     "lint:fix": "biome check --write src/",
     "format": "biome format --write src/"
   },
-  "author": "",
+  "keywords": [
+    "geometry",
+    "2d",
+    "rotation",
+    "reflection",
+    "bounding-box",
+    "point",
+    "segment",
+    "transform",
+    "typescript"
+  ],
+  "author": "email@cyberash.dev",
   "license": "ISC",
   "devDependencies": {
     "@biomejs/biome": "2.3.10",
     "@types/jest": "30.0.0",
     "jest": "30.2.0",
-    "ts-jest": "29.4.6"
+    "ts-jest": "29.4.6",
+    "typescript": "5.8.3"
   }
 }
