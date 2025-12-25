@@ -1,5 +1,6 @@
 import type { Box } from "./Box";
 import { Point } from "./Point";
+import type { Segment } from "./Segment";
 
 export class Box2D implements Box {
 	public readonly topLeftPoint: Point;
@@ -38,17 +39,37 @@ export class Box2D implements Box {
 				(this.topLeftPoint.y() + this.bottomRightPoint.y()) / 2,
 			);
 		const angleRad = (angle * Math.PI) / 180;
-		const tl = this.topLeftPoint;
-		const br = this.bottomRightPoint;
-		const tr = new Point(br.x(), tl.y());
-		const bl = new Point(tl.x(), br.y());
+		const topLeft = this.topLeftPoint;
+		const bottomRight = this.bottomRightPoint;
+		const topRight = new Point(bottomRight.x(), topLeft.y());
+		const bottomLeft = new Point(topLeft.x(), bottomRight.y());
 
-		const corners = [tl, tr, br, bl].map((p) => p.rotate(angleRad, rotationCenter));
+		const rotatedCorners = [topLeft, topRight, bottomRight, bottomLeft].map((corner) =>
+			corner.rotate(angleRad, rotationCenter),
+		);
 
-		const minX = Math.min(...corners.map((p) => p.x()));
-		const maxX = Math.max(...corners.map((p) => p.x()));
-		const minY = Math.min(...corners.map((p) => p.y()));
-		const maxY = Math.max(...corners.map((p) => p.y()));
+		const minX = Math.min(...rotatedCorners.map((corner) => corner.x()));
+		const maxX = Math.max(...rotatedCorners.map((corner) => corner.x()));
+		const minY = Math.min(...rotatedCorners.map((corner) => corner.y()));
+		const maxY = Math.max(...rotatedCorners.map((corner) => corner.y()));
+
+		return new Box2D(new Point(minX, minY), new Point(maxX, maxY));
+	}
+
+	reflect(axis: Segment): Box2D {
+		const topLeft = this.topLeftPoint;
+		const bottomRight = this.bottomRightPoint;
+		const topRight = new Point(bottomRight.x(), topLeft.y());
+		const bottomLeft = new Point(topLeft.x(), bottomRight.y());
+
+		const reflectedCorners = [topLeft, topRight, bottomRight, bottomLeft].map((corner) =>
+			corner.reflect(axis.start(), axis.end()),
+		);
+
+		const minX = Math.min(...reflectedCorners.map((corner) => corner.x()));
+		const maxX = Math.max(...reflectedCorners.map((corner) => corner.x()));
+		const minY = Math.min(...reflectedCorners.map((corner) => corner.y()));
+		const maxY = Math.max(...reflectedCorners.map((corner) => corner.y()));
 
 		return new Box2D(new Point(minX, minY), new Point(maxX, maxY));
 	}

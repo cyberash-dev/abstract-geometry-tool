@@ -1,5 +1,6 @@
 import type { Box } from "./Box";
 import { Point } from "./Point";
+import type { Segment } from "./Segment";
 
 export class GroupBox implements Box {
 	private readonly _boxes: Box[] = [];
@@ -44,5 +45,11 @@ export class GroupBox implements Box {
 		const rotatedChildren = this._boxes.map((child) => child.rotate(angle, rotationCenter));
 
 		return new GroupBox(rotatedChildren);
+	}
+
+	reflect(axis: Segment): GroupBox {
+		const reflectedChildren = this._boxes.map((child) => child.reflect(axis));
+
+		return new GroupBox(reflectedChildren);
 	}
 }

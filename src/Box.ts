@@ -1,4 +1,5 @@
 import type { Point } from "./Point";
+import type { Segment } from "./Segment";
 
 export type Box = {
 	topLeft(): Point;
@@ -6,4 +7,5 @@ export type Box = {
 	width(): number;
 	height(): number;
 	rotate(angle: number, center?: Point): Box;
+	reflect(axis: Segment): Box;
 };

@@ -60,4 +60,56 @@ describe("Point", () => {
 			expect(rotated.y()).toBeCloseTo(4);
 		});
 	});
+
+	describe("reflect", () => {
+		it("should reflect point over horizontal axis", () => {
+			const point = new Point(2, 3);
+			const axisStart = new Point(0, 0);
+			const axisEnd = new Point(10, 0);
+			const reflected = point.reflect(axisStart, axisEnd);
+
+			expect(reflected.x()).toBeCloseTo(2);
+			expect(reflected.y()).toBeCloseTo(-3);
+		});
+
+		it("should reflect point over vertical axis", () => {
+			const point = new Point(3, 2);
+			const axisStart = new Point(0, 0);
+			const axisEnd = new Point(0, 10);
+			const reflected = point.reflect(axisStart, axisEnd);
+
+			expect(reflected.x()).toBeCloseTo(-3);
+			expect(reflected.y()).toBeCloseTo(2);
+		});
+
+		it("should reflect point over diagonal axis (y = x)", () => {
+			const point = new Point(3, 1);
+			const axisStart = new Point(0, 0);
+			const axisEnd = new Point(1, 1);
+			const reflected = point.reflect(axisStart, axisEnd);
+
+			expect(reflected.x()).toBeCloseTo(1);
+			expect(reflected.y()).toBeCloseTo(3);
+		});
+
+		it("should return same point when point is on the axis", () => {
+			const point = new Point(5, 0);
+			const axisStart = new Point(0, 0);
+			const axisEnd = new Point(10, 0);
+			const reflected = point.reflect(axisStart, axisEnd);
+
+			expect(reflected.x()).toBeCloseTo(5);
+			expect(reflected.y()).toBeCloseTo(0);
+		});
+
+		it("should reflect over axis not passing through origin", () => {
+			const point = new Point(0, 0);
+			const axisStart = new Point(0, 5);
+			const axisEnd = new Point(10, 5);
+			const reflected = point.reflect(axisStart, axisEnd);
+
+			expect(reflected.x()).toBeCloseTo(0);
+			expect(reflected.y()).toBeCloseTo(10);
+		});
+	});
 });

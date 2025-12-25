@@ -16,11 +16,30 @@ export class Point {
 	}
 
 	rotate(angleRad: number, center: Point): Point {
-		const cos = Math.cos(angleRad);
-		const sin = Math.sin(angleRad);
-		const dx = this.x() - center.x();
-		const dy = this.y() - center.y();
+		const cosAngle = Math.cos(angleRad);
+		const sinAngle = Math.sin(angleRad);
+		const offsetX = this.x() - center.x();
+		const offsetY = this.y() - center.y();
 
-		return new Point(center.x() + dx * cos - dy * sin, center.y() + dx * sin + dy * cos);
+		return new Point(
+			center.x() + offsetX * cosAngle - offsetY * sinAngle,
+			center.y() + offsetX * sinAngle + offsetY * cosAngle,
+		);
+	}
+
+	reflect(axisStart: Point, axisEnd: Point): Point {
+		const axisDirectionX = axisEnd.x() - axisStart.x();
+		const axisDirectionY = axisEnd.y() - axisStart.y();
+		const pointOffsetX = this.x() - axisStart.x();
+		const pointOffsetY = this.y() - axisStart.y();
+
+		const dotProduct = pointOffsetX * axisDirectionX + pointOffsetY * axisDirectionY;
+		const axisLengthSquared = axisDirectionX * axisDirectionX + axisDirectionY * axisDirectionY;
+		const projectionFactor = dotProduct / axisLengthSquared;
+
+		const projectionX = axisStart.x() + projectionFactor * axisDirectionX;
+		const projectionY = axisStart.y() + projectionFactor * axisDirectionY;
+
+		return new Point(2 * projectionX - this.x(), 2 * projectionY - this.y());
 	}
 }

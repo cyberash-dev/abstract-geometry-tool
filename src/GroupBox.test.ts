@@ -1,6 +1,7 @@
 import { Box2D } from "./Box2D";
 import { GroupBox } from "./GroupBox";
 import { Point } from "./Point";
+import { Segment } from "./Segment";
 
 describe("GroupBox", () => {
 	describe("topLeft and bottomRight", () => {
@@ -102,6 +103,46 @@ describe("GroupBox", () => {
 			expect(rotated.topLeft().y()).toBeCloseTo(0);
 			expect(rotated.bottomRight().x()).toBeCloseTo(25);
 			expect(rotated.bottomRight().y()).toBeCloseTo(25);
+		});
+	});
+
+	describe("reflect", () => {
+		it("should reflect all children over horizontal axis", () => {
+			const box1 = new Box2D(new Point(0, 2), new Point(10, 6));
+			const box2 = new Box2D(new Point(20, 4), new Point(30, 8));
+			const group = new GroupBox([box1, box2]);
+			const axis = new Segment(new Point(0, 0), new Point(10, 0));
+			const reflected = group.reflect(axis);
+
+			expect(reflected.topLeft().x()).toBeCloseTo(0);
+			expect(reflected.topLeft().y()).toBeCloseTo(-8);
+			expect(reflected.bottomRight().x()).toBeCloseTo(30);
+			expect(reflected.bottomRight().y()).toBeCloseTo(-2);
+		});
+
+		it("should reflect over vertical axis", () => {
+			const box = new Box2D(new Point(2, 0), new Point(6, 4));
+			const group = new GroupBox([box]);
+			const axis = new Segment(new Point(0, 0), new Point(0, 10));
+			const reflected = group.reflect(axis);
+
+			expect(reflected.topLeft().x()).toBeCloseTo(-6);
+			expect(reflected.topLeft().y()).toBeCloseTo(0);
+			expect(reflected.bottomRight().x()).toBeCloseTo(-2);
+			expect(reflected.bottomRight().y()).toBeCloseTo(4);
+		});
+
+		it("should handle nested GroupBox reflection", () => {
+			const innerBox = new Box2D(new Point(0, 2), new Point(4, 6));
+			const innerGroup = new GroupBox([innerBox]);
+			const outerGroup = new GroupBox([innerGroup]);
+			const axis = new Segment(new Point(0, 0), new Point(10, 0));
+			const reflected = outerGroup.reflect(axis);
+
+			expect(reflected.topLeft().x()).toBeCloseTo(0);
+			expect(reflected.topLeft().y()).toBeCloseTo(-6);
+			expect(reflected.bottomRight().x()).toBeCloseTo(4);
+			expect(reflected.bottomRight().y()).toBeCloseTo(-2);
 		});
 	});
 });
