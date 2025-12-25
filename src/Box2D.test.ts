@@ -44,7 +44,7 @@ describe("Box2D", () => {
 	describe("rotate", () => {
 		it("should rotate 90 degrees around own center", () => {
 			const box = new Box2D(new Point(0, 0), new Point(10, 20));
-			const rotated = box.rotate(90);
+			const rotated = box.rotated(90);
 
 			expect(rotated.width()).toBeCloseTo(20);
 			expect(rotated.height()).toBeCloseTo(10);
@@ -52,7 +52,7 @@ describe("Box2D", () => {
 
 		it("should rotate 180 degrees and maintain dimensions", () => {
 			const box = new Box2D(new Point(0, 0), new Point(10, 20));
-			const rotated = box.rotate(180);
+			const rotated = box.rotated(180);
 
 			expect(rotated.width()).toBeCloseTo(10);
 			expect(rotated.height()).toBeCloseTo(20);
@@ -61,7 +61,7 @@ describe("Box2D", () => {
 		it("should rotate around specified center", () => {
 			const box = new Box2D(new Point(0, 0), new Point(2, 2));
 			const center = new Point(0, 0);
-			const rotated = box.rotate(90, center);
+			const rotated = box.rotated(90, center);
 
 			expect(rotated.topLeft().x()).toBeCloseTo(-2);
 			expect(rotated.topLeft().y()).toBeCloseTo(0);
@@ -71,7 +71,7 @@ describe("Box2D", () => {
 
 		it("should rotate 45 degrees and expand bounding box", () => {
 			const box = new Box2D(new Point(0, 0), new Point(10, 10));
-			const rotated = box.rotate(45);
+			const rotated = box.rotated(45);
 
 			const expectedDiagonal = 10 * Math.sqrt(2);
 			expect(rotated.width()).toBeCloseTo(expectedDiagonal);
@@ -80,7 +80,7 @@ describe("Box2D", () => {
 
 		it("should rotate 360 degrees back to original", () => {
 			const box = new Box2D(new Point(5, 10), new Point(15, 30));
-			const rotated = box.rotate(360);
+			const rotated = box.rotated(360);
 
 			expect(rotated.topLeft().x()).toBeCloseTo(5);
 			expect(rotated.topLeft().y()).toBeCloseTo(10);
@@ -93,7 +93,7 @@ describe("Box2D", () => {
 		it("should reflect over horizontal axis", () => {
 			const box = new Box2D(new Point(0, 2), new Point(4, 6));
 			const axis = new Segment(new Point(0, 0), new Point(10, 0));
-			const reflected = box.reflect(axis);
+			const reflected = box.reflected(axis);
 
 			expect(reflected.topLeft().x()).toBeCloseTo(0);
 			expect(reflected.topLeft().y()).toBeCloseTo(-6);
@@ -104,7 +104,7 @@ describe("Box2D", () => {
 		it("should reflect over vertical axis", () => {
 			const box = new Box2D(new Point(2, 0), new Point(6, 4));
 			const axis = new Segment(new Point(0, 0), new Point(0, 10));
-			const reflected = box.reflect(axis);
+			const reflected = box.reflected(axis);
 
 			expect(reflected.topLeft().x()).toBeCloseTo(-6);
 			expect(reflected.topLeft().y()).toBeCloseTo(0);
@@ -115,7 +115,7 @@ describe("Box2D", () => {
 		it("should preserve dimensions when reflecting", () => {
 			const box = new Box2D(new Point(0, 0), new Point(10, 20));
 			const axis = new Segment(new Point(0, 0), new Point(1, 1));
-			const reflected = box.reflect(axis);
+			const reflected = box.reflected(axis);
 
 			expect(reflected.width()).toBeCloseTo(20);
 			expect(reflected.height()).toBeCloseTo(10);
@@ -124,12 +124,72 @@ describe("Box2D", () => {
 		it("should reflect over axis not passing through origin", () => {
 			const box = new Box2D(new Point(0, 0), new Point(4, 4));
 			const axis = new Segment(new Point(0, 10), new Point(10, 10));
-			const reflected = box.reflect(axis);
+			const reflected = box.reflected(axis);
 
 			expect(reflected.topLeft().x()).toBeCloseTo(0);
 			expect(reflected.topLeft().y()).toBeCloseTo(16);
 			expect(reflected.bottomRight().x()).toBeCloseTo(4);
 			expect(reflected.bottomRight().y()).toBeCloseTo(20);
+		});
+	});
+
+	describe("reflectedByHorizontal", () => {
+		it("should preserve dimensions when reflecting over horizontal center axis", () => {
+			const box = new Box2D(new Point(0, 0), new Point(10, 20));
+			const reflected = box.reflectedByHorizontal();
+
+			expect(reflected.width()).toBeCloseTo(10);
+			expect(reflected.height()).toBeCloseTo(20);
+		});
+
+		it("should keep box in same position when reflecting over its horizontal center", () => {
+			const box = new Box2D(new Point(5, 10), new Point(15, 30));
+			const reflected = box.reflectedByHorizontal();
+
+			expect(reflected.topLeft().x()).toBeCloseTo(5);
+			expect(reflected.topLeft().y()).toBeCloseTo(10);
+			expect(reflected.bottomRight().x()).toBeCloseTo(15);
+			expect(reflected.bottomRight().y()).toBeCloseTo(30);
+		});
+
+		it("should reflect over y=0 axis when centered is false", () => {
+			const box = new Box2D(new Point(0, 10), new Point(10, 20));
+			const reflected = box.reflectedByHorizontal(false);
+
+			expect(reflected.topLeft().x()).toBeCloseTo(0);
+			expect(reflected.topLeft().y()).toBeCloseTo(-20);
+			expect(reflected.bottomRight().x()).toBeCloseTo(10);
+			expect(reflected.bottomRight().y()).toBeCloseTo(-10);
+		});
+	});
+
+	describe("reflectedByVertical", () => {
+		it("should preserve dimensions when reflecting over vertical center axis", () => {
+			const box = new Box2D(new Point(0, 0), new Point(10, 20));
+			const reflected = box.reflectedByVertical();
+
+			expect(reflected.width()).toBeCloseTo(10);
+			expect(reflected.height()).toBeCloseTo(20);
+		});
+
+		it("should keep box in same position when reflecting over its vertical center", () => {
+			const box = new Box2D(new Point(5, 10), new Point(15, 30));
+			const reflected = box.reflectedByVertical();
+
+			expect(reflected.topLeft().x()).toBeCloseTo(5);
+			expect(reflected.topLeft().y()).toBeCloseTo(10);
+			expect(reflected.bottomRight().x()).toBeCloseTo(15);
+			expect(reflected.bottomRight().y()).toBeCloseTo(30);
+		});
+
+		it("should reflect over x=0 axis when centered is false", () => {
+			const box = new Box2D(new Point(10, 0), new Point(20, 10));
+			const reflected = box.reflectedByVertical(false);
+
+			expect(reflected.topLeft().x()).toBeCloseTo(-20);
+			expect(reflected.topLeft().y()).toBeCloseTo(0);
+			expect(reflected.bottomRight().x()).toBeCloseTo(-10);
+			expect(reflected.bottomRight().y()).toBeCloseTo(10);
 		});
 	});
 });

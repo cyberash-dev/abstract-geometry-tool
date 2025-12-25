@@ -1,6 +1,6 @@
 import type { Box } from "./Box";
 import { Point } from "./Point";
-import type { Segment } from "./Segment";
+import { Segment } from "./Segment";
 
 export class Box2D implements Box {
 	public readonly topLeftPoint: Point;
@@ -31,7 +31,7 @@ export class Box2D implements Box {
 		return this.bottomRightPoint.y() - this.topLeftPoint.y();
 	}
 
-	rotate(angle: number, center?: Point) {
+	rotated(angle: number, center?: Point) {
 		const rotationCenter =
 			center ??
 			new Point(
@@ -56,7 +56,7 @@ export class Box2D implements Box {
 		return new Box2D(new Point(minX, minY), new Point(maxX, maxY));
 	}
 
-	reflect(axis: Segment): Box2D {
+	reflected(axis: Segment): Box2D {
 		const topLeft = this.topLeftPoint;
 		const bottomRight = this.bottomRightPoint;
 		const topRight = new Point(bottomRight.x(), topLeft.y());
@@ -72,5 +72,17 @@ export class Box2D implements Box {
 		const maxY = Math.max(...reflectedCorners.map((corner) => corner.y()));
 
 		return new Box2D(new Point(minX, minY), new Point(maxX, maxY));
+	}
+
+	reflectedByHorizontal(centered: boolean = true): Box2D {
+		const axisY = centered ? (this.topLeftPoint.y() + this.bottomRightPoint.y()) / 2 : 0;
+
+		return this.reflected(new Segment(new Point(0, axisY), new Point(1, axisY)));
+	}
+
+	reflectedByVertical(centered: boolean = true): Box2D {
+		const axisX = centered ? (this.topLeftPoint.x() + this.bottomRightPoint.x()) / 2 : 0;
+
+		return this.reflected(new Segment(new Point(axisX, 0), new Point(axisX, 1)));
 	}
 }

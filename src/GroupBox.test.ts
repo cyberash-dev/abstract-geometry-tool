@@ -54,7 +54,7 @@ describe("GroupBox", () => {
 			const box1 = new Box2D(new Point(0, 0), new Point(10, 10));
 			const box2 = new Box2D(new Point(20, 0), new Point(30, 10));
 			const group = new GroupBox([box1, box2]);
-			const rotated = group.rotate(180);
+			const rotated = group.rotated(180);
 
 			expect(rotated.width()).toBeCloseTo(30);
 			expect(rotated.height()).toBeCloseTo(10);
@@ -64,7 +64,7 @@ describe("GroupBox", () => {
 			const box = new Box2D(new Point(0, 0), new Point(10, 10));
 			const group = new GroupBox([box]);
 			const center = new Point(0, 0);
-			const rotated = group.rotate(90, center);
+			const rotated = group.rotated(90, center);
 
 			expect(rotated.topLeft().x()).toBeCloseTo(-10);
 			expect(rotated.topLeft().y()).toBeCloseTo(0);
@@ -75,7 +75,7 @@ describe("GroupBox", () => {
 			const box2 = new Box2D(new Point(10, 0), new Point(20, 10));
 			const group = new GroupBox([box1, box2]);
 
-			const rotated = group.rotate(90);
+			const rotated = group.rotated(90);
 
 			expect(rotated.width()).toBeCloseTo(10);
 			expect(rotated.height()).toBeCloseTo(20);
@@ -86,7 +86,7 @@ describe("GroupBox", () => {
 			const innerGroup = new GroupBox([innerBox]);
 			const outerGroup = new GroupBox([innerGroup]);
 
-			const rotated = outerGroup.rotate(90);
+			const rotated = outerGroup.rotated(90);
 
 			expect(rotated.width()).toBeCloseTo(10);
 			expect(rotated.height()).toBeCloseTo(10);
@@ -97,7 +97,7 @@ describe("GroupBox", () => {
 			const box2 = new Box2D(new Point(15, 15), new Point(25, 25));
 			const group = new GroupBox([box1, box2]);
 
-			const rotated = group.rotate(360);
+			const rotated = group.rotated(360);
 
 			expect(rotated.topLeft().x()).toBeCloseTo(0);
 			expect(rotated.topLeft().y()).toBeCloseTo(0);
@@ -112,7 +112,7 @@ describe("GroupBox", () => {
 			const box2 = new Box2D(new Point(20, 4), new Point(30, 8));
 			const group = new GroupBox([box1, box2]);
 			const axis = new Segment(new Point(0, 0), new Point(10, 0));
-			const reflected = group.reflect(axis);
+			const reflected = group.reflected(axis);
 
 			expect(reflected.topLeft().x()).toBeCloseTo(0);
 			expect(reflected.topLeft().y()).toBeCloseTo(-8);
@@ -124,7 +124,7 @@ describe("GroupBox", () => {
 			const box = new Box2D(new Point(2, 0), new Point(6, 4));
 			const group = new GroupBox([box]);
 			const axis = new Segment(new Point(0, 0), new Point(0, 10));
-			const reflected = group.reflect(axis);
+			const reflected = group.reflected(axis);
 
 			expect(reflected.topLeft().x()).toBeCloseTo(-6);
 			expect(reflected.topLeft().y()).toBeCloseTo(0);
@@ -137,12 +137,78 @@ describe("GroupBox", () => {
 			const innerGroup = new GroupBox([innerBox]);
 			const outerGroup = new GroupBox([innerGroup]);
 			const axis = new Segment(new Point(0, 0), new Point(10, 0));
-			const reflected = outerGroup.reflect(axis);
+			const reflected = outerGroup.reflected(axis);
 
 			expect(reflected.topLeft().x()).toBeCloseTo(0);
 			expect(reflected.topLeft().y()).toBeCloseTo(-6);
 			expect(reflected.bottomRight().x()).toBeCloseTo(4);
 			expect(reflected.bottomRight().y()).toBeCloseTo(-2);
+		});
+	});
+
+	describe("reflectedByHorizontal", () => {
+		it("should preserve dimensions when reflecting over horizontal center axis", () => {
+			const box = new Box2D(new Point(0, 0), new Point(10, 20));
+			const group = new GroupBox([box]);
+			const reflected = group.reflectedByHorizontal();
+
+			expect(reflected.width()).toBeCloseTo(10);
+			expect(reflected.height()).toBeCloseTo(20);
+		});
+
+		it("should keep group in same position when reflecting over its horizontal center", () => {
+			const box = new Box2D(new Point(5, 10), new Point(15, 30));
+			const group = new GroupBox([box]);
+			const reflected = group.reflectedByHorizontal();
+
+			expect(reflected.topLeft().x()).toBeCloseTo(5);
+			expect(reflected.topLeft().y()).toBeCloseTo(10);
+			expect(reflected.bottomRight().x()).toBeCloseTo(15);
+			expect(reflected.bottomRight().y()).toBeCloseTo(30);
+		});
+
+		it("should reflect over y=0 axis when centered is false", () => {
+			const box = new Box2D(new Point(0, 10), new Point(10, 20));
+			const group = new GroupBox([box]);
+			const reflected = group.reflectedByHorizontal(false);
+
+			expect(reflected.topLeft().x()).toBeCloseTo(0);
+			expect(reflected.topLeft().y()).toBeCloseTo(-20);
+			expect(reflected.bottomRight().x()).toBeCloseTo(10);
+			expect(reflected.bottomRight().y()).toBeCloseTo(-10);
+		});
+	});
+
+	describe("reflectedByVertical", () => {
+		it("should preserve dimensions when reflecting over vertical center axis", () => {
+			const box = new Box2D(new Point(0, 0), new Point(10, 20));
+			const group = new GroupBox([box]);
+			const reflected = group.reflectedByVertical();
+
+			expect(reflected.width()).toBeCloseTo(10);
+			expect(reflected.height()).toBeCloseTo(20);
+		});
+
+		it("should keep group in same position when reflecting over its vertical center", () => {
+			const box = new Box2D(new Point(5, 10), new Point(15, 30));
+			const group = new GroupBox([box]);
+			const reflected = group.reflectedByVertical();
+
+			expect(reflected.topLeft().x()).toBeCloseTo(5);
+			expect(reflected.topLeft().y()).toBeCloseTo(10);
+			expect(reflected.bottomRight().x()).toBeCloseTo(15);
+			expect(reflected.bottomRight().y()).toBeCloseTo(30);
+		});
+
+		it("should reflect over x=0 axis when centered is false", () => {
+			const box = new Box2D(new Point(10, 0), new Point(20, 10));
+			const group = new GroupBox([box]);
+			const reflected = group.reflectedByVertical(false);
+
+			expect(reflected.topLeft().x()).toBeCloseTo(-20);
+			expect(reflected.topLeft().y()).toBeCloseTo(0);
+			expect(reflected.bottomRight().x()).toBeCloseTo(-10);
+			expect(reflected.bottomRight().y()).toBeCloseTo(10);
 		});
 	});
 });
