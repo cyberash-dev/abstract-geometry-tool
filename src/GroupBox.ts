@@ -35,6 +35,13 @@ export class GroupBox implements Box {
 		return this.bottomRight().y() - this.topLeft().y();
 	}
 
+	center(): Point {
+		return new Point(
+			(this.topLeft().x() + this.bottomRight().x()) / 2,
+			(this.topLeft().y() + this.bottomRight().y()) / 2,
+		);
+	}
+
 	rotated(angle: number, center?: Point): GroupBox {
 		const rotationCenter =
 			center ??
@@ -54,13 +61,13 @@ export class GroupBox implements Box {
 	}
 
 	reflectedByHorizontal(centered: boolean = true): GroupBox {
-		const axisY = centered ? (this.topLeft().y() + this.bottomRight().y()) / 2 : 0;
+		const axisY = centered ? this.center().y() : 0;
 
 		return this.reflected(new Segment(new Point(0, axisY), new Point(1, axisY)));
 	}
 
 	reflectedByVertical(centered: boolean = true): GroupBox {
-		const axisX = centered ? (this.topLeft().x() + this.bottomRight().x()) / 2 : 0;
+		const axisX = centered ? this.center().x() : 0;
 
 		return this.reflected(new Segment(new Point(axisX, 0), new Point(axisX, 1)));
 	}

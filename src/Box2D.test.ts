@@ -41,6 +41,29 @@ describe("Box2D", () => {
 		});
 	});
 
+	describe("center", () => {
+		it("should calculate center of box at origin", () => {
+			const box = new Box2D(new Point(0, 0), new Point(10, 20));
+
+			expect(box.center().x()).toBe(5);
+			expect(box.center().y()).toBe(10);
+		});
+
+		it("should calculate center of box not at origin", () => {
+			const box = new Box2D(new Point(10, 20), new Point(30, 40));
+
+			expect(box.center().x()).toBe(20);
+			expect(box.center().y()).toBe(30);
+		});
+
+		it("should calculate center of square box", () => {
+			const box = new Box2D(new Point(0, 0), new Point(10, 10));
+
+			expect(box.center().x()).toBe(5);
+			expect(box.center().y()).toBe(5);
+		});
+	});
+
 	describe("rotate", () => {
 		it("should rotate 90 degrees around own center", () => {
 			const box = new Box2D(new Point(0, 0), new Point(10, 20));

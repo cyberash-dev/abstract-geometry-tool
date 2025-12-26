@@ -6,6 +6,7 @@ export type Box = {
 	bottomRight(): Point;
 	width(): number;
 	height(): number;
+	center(): Point;
 	rotated(angle: number, center?: Point): Box;
 	reflected(axis: Segment): Box;
 	reflectedByHorizontal(centered?: boolean): Box;

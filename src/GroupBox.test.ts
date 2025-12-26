@@ -49,6 +49,34 @@ describe("GroupBox", () => {
 		});
 	});
 
+	describe("center", () => {
+		it("should calculate center of single child group", () => {
+			const box = new Box2D(new Point(0, 0), new Point(10, 20));
+			const group = new GroupBox([box]);
+
+			expect(group.center().x()).toBe(5);
+			expect(group.center().y()).toBe(10);
+		});
+
+		it("should calculate center of multiple children", () => {
+			const box1 = new Box2D(new Point(0, 0), new Point(10, 10));
+			const box2 = new Box2D(new Point(20, 20), new Point(30, 30));
+			const group = new GroupBox([box1, box2]);
+
+			expect(group.center().x()).toBe(15);
+			expect(group.center().y()).toBe(15);
+		});
+
+		it("should calculate center based on bounding box not children centers", () => {
+			const box1 = new Box2D(new Point(0, 0), new Point(10, 10));
+			const box2 = new Box2D(new Point(40, 0), new Point(50, 10));
+			const group = new GroupBox([box1, box2]);
+
+			expect(group.center().x()).toBe(25);
+			expect(group.center().y()).toBe(5);
+		});
+	});
+
 	describe("rotate", () => {
 		it("should rotate all children around group center", () => {
 			const box1 = new Box2D(new Point(0, 0), new Point(10, 10));

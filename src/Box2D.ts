@@ -15,6 +15,13 @@ export class Box2D implements Box {
 		return new Box2D(topLeft, new Point(topLeft.x() + width, topLeft.y() + height));
 	}
 
+	center(): Point {
+		return new Point(
+			(this.topLeftPoint.x() + this.bottomRightPoint.x()) / 2,
+			(this.topLeftPoint.y() + this.bottomRightPoint.y()) / 2,
+		);
+	}
+
 	topLeft(): Point {
 		return this.topLeftPoint;
 	}
@@ -75,13 +82,13 @@ export class Box2D implements Box {
 	}
 
 	reflectedByHorizontal(centered: boolean = true): Box2D {
-		const axisY = centered ? (this.topLeftPoint.y() + this.bottomRightPoint.y()) / 2 : 0;
+		const axisY = centered ? this.center().y() : 0;
 
 		return this.reflected(new Segment(new Point(0, axisY), new Point(1, axisY)));
 	}
 
 	reflectedByVertical(centered: boolean = true): Box2D {
-		const axisX = centered ? (this.topLeftPoint.x() + this.bottomRightPoint.x()) / 2 : 0;
+		const axisX = centered ? this.center().x() : 0;
 
 		return this.reflected(new Segment(new Point(axisX, 0), new Point(axisX, 1)));
 	}
