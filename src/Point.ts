@@ -15,7 +15,7 @@ export class Point {
 		return this._y;
 	}
 
-	rotate(angleRad: number, center: Point): Point {
+	rotated(angleRad: number, center: Point): Point {
 		const cosAngle = Math.cos(angleRad);
 		const sinAngle = Math.sin(angleRad);
 		const offsetX = this.x() - center.x();
@@ -27,7 +27,7 @@ export class Point {
 		);
 	}
 
-	reflect(axisStart: Point, axisEnd: Point): Point {
+	reflected(axisStart: Point, axisEnd: Point): Point {
 		const axisDirectionX = axisEnd.x() - axisStart.x();
 		const axisDirectionY = axisEnd.y() - axisStart.y();
 		const pointOffsetX = this.x() - axisStart.x();

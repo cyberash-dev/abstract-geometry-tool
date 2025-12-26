@@ -52,7 +52,7 @@ export class Box2D implements Box {
 		const bottomLeft = new Point(topLeft.x(), bottomRight.y());
 
 		const rotatedCorners = [topLeft, topRight, bottomRight, bottomLeft].map((corner) =>
-			corner.rotate(angleRad, rotationCenter),
+			corner.rotated(angleRad, rotationCenter),
 		);
 
 		const minX = Math.min(...rotatedCorners.map((corner) => corner.x()));
@@ -70,7 +70,7 @@ export class Box2D implements Box {
 		const bottomLeft = new Point(topLeft.x(), bottomRight.y());
 
 		const reflectedCorners = [topLeft, topRight, bottomRight, bottomLeft].map((corner) =>
-			corner.reflect(axis.start(), axis.end()),
+			corner.reflected(axis.start(), axis.end()),
 		);
 
 		const minX = Math.min(...reflectedCorners.map((corner) => corner.x()));

@@ -19,7 +19,7 @@ describe("Point", () => {
 		it("should rotate point 90 degrees around origin", () => {
 			const point = new Point(1, 0);
 			const center = new Point(0, 0);
-			const rotated = point.rotate(Math.PI / 2, center);
+			const rotated = point.rotated(Math.PI / 2, center);
 
 			expect(rotated.x()).toBeCloseTo(0);
 			expect(rotated.y()).toBeCloseTo(1);
@@ -28,7 +28,7 @@ describe("Point", () => {
 		it("should rotate point 180 degrees around origin", () => {
 			const point = new Point(1, 0);
 			const center = new Point(0, 0);
-			const rotated = point.rotate(Math.PI, center);
+			const rotated = point.rotated(Math.PI, center);
 
 			expect(rotated.x()).toBeCloseTo(-1);
 			expect(rotated.y()).toBeCloseTo(0);
@@ -37,7 +37,7 @@ describe("Point", () => {
 		it("should rotate point 90 degrees around custom center", () => {
 			const point = new Point(2, 1);
 			const center = new Point(1, 1);
-			const rotated = point.rotate(Math.PI / 2, center);
+			const rotated = point.rotated(Math.PI / 2, center);
 
 			expect(rotated.x()).toBeCloseTo(1);
 			expect(rotated.y()).toBeCloseTo(2);
@@ -45,7 +45,7 @@ describe("Point", () => {
 
 		it("should return same point when rotating around itself", () => {
 			const point = new Point(5, 5);
-			const rotated = point.rotate(Math.PI / 4, point);
+			const rotated = point.rotated(Math.PI / 4, point);
 
 			expect(rotated.x()).toBeCloseTo(5);
 			expect(rotated.y()).toBeCloseTo(5);
@@ -54,7 +54,7 @@ describe("Point", () => {
 		it("should rotate point 360 degrees back to original", () => {
 			const point = new Point(3, 4);
 			const center = new Point(1, 1);
-			const rotated = point.rotate(2 * Math.PI, center);
+			const rotated = point.rotated(2 * Math.PI, center);
 
 			expect(rotated.x()).toBeCloseTo(3);
 			expect(rotated.y()).toBeCloseTo(4);
@@ -66,7 +66,7 @@ describe("Point", () => {
 			const point = new Point(2, 3);
 			const axisStart = new Point(0, 0);
 			const axisEnd = new Point(10, 0);
-			const reflected = point.reflect(axisStart, axisEnd);
+			const reflected = point.reflected(axisStart, axisEnd);
 
 			expect(reflected.x()).toBeCloseTo(2);
 			expect(reflected.y()).toBeCloseTo(-3);
@@ -76,7 +76,7 @@ describe("Point", () => {
 			const point = new Point(3, 2);
 			const axisStart = new Point(0, 0);
 			const axisEnd = new Point(0, 10);
-			const reflected = point.reflect(axisStart, axisEnd);
+			const reflected = point.reflected(axisStart, axisEnd);
 
 			expect(reflected.x()).toBeCloseTo(-3);
 			expect(reflected.y()).toBeCloseTo(2);
@@ -86,7 +86,7 @@ describe("Point", () => {
 			const point = new Point(3, 1);
 			const axisStart = new Point(0, 0);
 			const axisEnd = new Point(1, 1);
-			const reflected = point.reflect(axisStart, axisEnd);
+			const reflected = point.reflected(axisStart, axisEnd);
 
 			expect(reflected.x()).toBeCloseTo(1);
 			expect(reflected.y()).toBeCloseTo(3);
@@ -96,7 +96,7 @@ describe("Point", () => {
 			const point = new Point(5, 0);
 			const axisStart = new Point(0, 0);
 			const axisEnd = new Point(10, 0);
-			const reflected = point.reflect(axisStart, axisEnd);
+			const reflected = point.reflected(axisStart, axisEnd);
 
 			expect(reflected.x()).toBeCloseTo(5);
 			expect(reflected.y()).toBeCloseTo(0);
@@ -106,7 +106,7 @@ describe("Point", () => {
 			const point = new Point(0, 0);
 			const axisStart = new Point(0, 5);
 			const axisEnd = new Point(10, 5);
-			const reflected = point.reflect(axisStart, axisEnd);
+			const reflected = point.reflected(axisStart, axisEnd);
 
 			expect(reflected.x()).toBeCloseTo(0);
 			expect(reflected.y()).toBeCloseTo(10);

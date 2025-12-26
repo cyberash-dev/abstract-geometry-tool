@@ -6,6 +6,7 @@ A lightweight TypeScript library for 2D box geometry with rotation and reflectio
 
 - **Point** — immutable 2D point with rotation and reflection
 - **Segment** — line segment defined by two points
+- **Polyline** — sequence of connected points with transformations
 - **Box2D** — axis-aligned bounding box with geometric transformations
 - **GroupBox** — container for multiple boxes with group transformations
 
@@ -18,7 +19,7 @@ npm install abstract-rotary-tool
 ## Usage
 
 ```typescript
-import { Point, Segment, Box2D, GroupBox } from "abstract-rotary-tool";
+import { Point, Segment, Polyline, Box2D, GroupBox } from "abstract-rotary-tool";
 
 // Create a box
 const box = new Box2D(new Point(0, 0), new Point(100, 50));
@@ -44,6 +45,11 @@ const flippedV = box.reflectedByVertical();
 const flippedHOrigin = box.reflectedByHorizontal(false);
 const flippedVOrigin = box.reflectedByVertical(false);
 
+// Create a polyline
+const polyline = new Polyline([new Point(0, 0), new Point(10, 10), new Point(20, 0)]);
+const rotatedPolyline = polyline.rotated(Math.PI / 2, new Point(0, 0));
+const reflectedPolyline = polyline.reflected(axis);
+
 // Group multiple boxes
 const group = new GroupBox([box1, box2, box3]);
 const rotatedGroup = group.rotated(180);
@@ -62,6 +68,12 @@ const reflectedGroup = group.reflected(axis);
 - `new Segment(start, end)` — create a segment from two points
 - `start()`, `end()` — get endpoints
 - `length()` — get segment length
+
+### Polyline
+- `new Polyline(points)` — create from array of points
+- `points()` — get all points
+- `rotated(angleRad, center)` — rotate all points around center (radians)
+- `reflected(axis)` — reflect all points over a line segment
 
 ### Box2D
 - `new Box2D(topLeft, bottomRight)` — create from corners
