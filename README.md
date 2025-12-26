@@ -72,8 +72,11 @@ const reflectedGroup = group.reflected(axis);
 ### Polyline
 - `new Polyline(points)` — create from array of points
 - `points()` — get all points
+- `center()` — get center point (midpoint between first and last point)
 - `rotated(angleRad, center)` — rotate all points around center (radians)
 - `reflected(axis)` — reflect all points over a line segment
+- `reflectedByHorizontal(centered?)` — reflect over horizontal axis (y=0 if centered=false)
+- `reflectedByVertical(centered?)` — reflect over vertical axis (x=0 if centered=false)
 
 ### Box2D
 - `new Box2D(topLeft, bottomRight)` — create from corners

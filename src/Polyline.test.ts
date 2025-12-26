@@ -127,4 +127,79 @@ describe("Polyline", () => {
 			expect(reflected.points()).toHaveLength(3);
 		});
 	});
+
+	describe("center", () => {
+		it("should calculate center between first and last point", () => {
+			const polyline = new Polyline([new Point(0, 0), new Point(10, 10), new Point(20, 0)]);
+
+			expect(polyline.center().x()).toBe(10);
+			expect(polyline.center().y()).toBe(0);
+		});
+
+		it("should calculate center for two points", () => {
+			const polyline = new Polyline([new Point(0, 0), new Point(10, 20)]);
+
+			expect(polyline.center().x()).toBe(5);
+			expect(polyline.center().y()).toBe(10);
+		});
+
+		it("should return point itself for single point polyline", () => {
+			const polyline = new Polyline([new Point(5, 5)]);
+
+			expect(polyline.center().x()).toBe(5);
+			expect(polyline.center().y()).toBe(5);
+		});
+	});
+
+	describe("reflectedByHorizontal", () => {
+		it("should reflect over horizontal axis through center when centered is true", () => {
+			const polyline = new Polyline([new Point(0, 0), new Point(10, 10), new Point(20, 0)]);
+			const reflected = polyline.reflectedByHorizontal(true);
+
+			expect(reflected.points()[0].x()).toBeCloseTo(0);
+			expect(reflected.points()[0].y()).toBeCloseTo(0);
+			expect(reflected.points()[1].x()).toBeCloseTo(10);
+			expect(reflected.points()[1].y()).toBeCloseTo(-10);
+			expect(reflected.points()[2].x()).toBeCloseTo(20);
+			expect(reflected.points()[2].y()).toBeCloseTo(0);
+		});
+
+		it("should reflect over y=0 axis when centered is false", () => {
+			const polyline = new Polyline([new Point(0, 5), new Point(10, 10), new Point(20, 5)]);
+			const reflected = polyline.reflectedByHorizontal(false);
+
+			expect(reflected.points()[0].x()).toBeCloseTo(0);
+			expect(reflected.points()[0].y()).toBeCloseTo(-5);
+			expect(reflected.points()[1].x()).toBeCloseTo(10);
+			expect(reflected.points()[1].y()).toBeCloseTo(-10);
+			expect(reflected.points()[2].x()).toBeCloseTo(20);
+			expect(reflected.points()[2].y()).toBeCloseTo(-5);
+		});
+	});
+
+	describe("reflectedByVertical", () => {
+		it("should reflect over vertical axis through center when centered is true", () => {
+			const polyline = new Polyline([new Point(0, 0), new Point(10, 10), new Point(20, 0)]);
+			const reflected = polyline.reflectedByVertical(true);
+
+			expect(reflected.points()[0].x()).toBeCloseTo(20);
+			expect(reflected.points()[0].y()).toBeCloseTo(0);
+			expect(reflected.points()[1].x()).toBeCloseTo(10);
+			expect(reflected.points()[1].y()).toBeCloseTo(10);
+			expect(reflected.points()[2].x()).toBeCloseTo(0);
+			expect(reflected.points()[2].y()).toBeCloseTo(0);
+		});
+
+		it("should reflect over x=0 axis when centered is false", () => {
+			const polyline = new Polyline([new Point(5, 0), new Point(10, 10), new Point(15, 0)]);
+			const reflected = polyline.reflectedByVertical(false);
+
+			expect(reflected.points()[0].x()).toBeCloseTo(-5);
+			expect(reflected.points()[0].y()).toBeCloseTo(0);
+			expect(reflected.points()[1].x()).toBeCloseTo(-10);
+			expect(reflected.points()[1].y()).toBeCloseTo(10);
+			expect(reflected.points()[2].x()).toBeCloseTo(-15);
+			expect(reflected.points()[2].y()).toBeCloseTo(0);
+		});
+	});
 });
