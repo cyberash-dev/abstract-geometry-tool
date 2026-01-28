@@ -1,3 +1,5 @@
+import { degreesToRadians } from "./utils/angle";
+
 export class Point {
 	private readonly _x: number;
 	private readonly _y: number;
@@ -15,7 +17,8 @@ export class Point {
 		return this._y;
 	}
 
-	rotated(angleRad: number, center: Point): Point {
+	rotated(angleDegrees: number, center: Point): Point {
+		const angleRad = degreesToRadians(angleDegrees);
 		const cosAngle = Math.cos(angleRad);
 		const sinAngle = Math.sin(angleRad);
 		const offsetX = this.x() - center.x();

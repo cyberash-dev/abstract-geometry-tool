@@ -1,4 +1,4 @@
-import { Point } from "./Point";
+import { Point } from "../Point";
 import { Polyline } from "./Polyline";
 import { Segment } from "./Segment";
 
@@ -29,12 +29,28 @@ describe("Polyline", () => {
 		});
 	});
 
+	describe("rotation", () => {
+		it("should return rotation angle", () => {
+			const points = [new Point(0, 0), new Point(10, 10)];
+			const polyline = new Polyline(points, 30);
+
+			expect(polyline.rotation()).toBe(30);
+		});
+
+		it("should default rotation to 0", () => {
+			const points = [new Point(0, 0), new Point(10, 10)];
+			const polyline = new Polyline(points);
+
+			expect(polyline.rotation()).toBe(0);
+		});
+	});
+
 	describe("rotated", () => {
 		it("should rotate all points around center", () => {
 			const points = [new Point(1, 0), new Point(2, 0), new Point(3, 0)];
 			const polyline = new Polyline(points);
 			const center = new Point(0, 0);
-			const rotated = polyline.rotated(Math.PI / 2, center);
+			const rotated = polyline.rotated(90, center);
 
 			expect(rotated.points()[0].x()).toBeCloseTo(0);
 			expect(rotated.points()[0].y()).toBeCloseTo(1);
@@ -48,7 +64,7 @@ describe("Polyline", () => {
 			const points = [new Point(1, 0), new Point(2, 0)];
 			const polyline = new Polyline(points);
 			const center = new Point(0, 0);
-			const rotated = polyline.rotated(Math.PI, center);
+			const rotated = polyline.rotated(180, center);
 
 			expect(rotated.points()[0].x()).toBeCloseTo(-1);
 			expect(rotated.points()[0].y()).toBeCloseTo(0);
@@ -60,7 +76,7 @@ describe("Polyline", () => {
 			const points = [new Point(2, 1), new Point(3, 1)];
 			const polyline = new Polyline(points);
 			const center = new Point(1, 1);
-			const rotated = polyline.rotated(Math.PI / 2, center);
+			const rotated = polyline.rotated(90, center);
 
 			expect(rotated.points()[0].x()).toBeCloseTo(1);
 			expect(rotated.points()[0].y()).toBeCloseTo(2);
@@ -71,9 +87,20 @@ describe("Polyline", () => {
 		it("should preserve point count after rotation", () => {
 			const points = [new Point(0, 0), new Point(1, 1), new Point(2, 2), new Point(3, 3)];
 			const polyline = new Polyline(points);
-			const rotated = polyline.rotated(Math.PI / 4, new Point(0, 0));
+			const rotated = polyline.rotated(45, new Point(0, 0));
 
 			expect(rotated.points()).toHaveLength(4);
+		});
+
+		it("should rotate around polyline center when no center is provided", () => {
+			const points = [new Point(0, 0), new Point(10, 0)];
+			const polyline = new Polyline(points);
+			const rotated = polyline.rotated(90);
+
+			expect(rotated.points()[0].x()).toBeCloseTo(5);
+			expect(rotated.points()[0].y()).toBeCloseTo(-5);
+			expect(rotated.points()[1].x()).toBeCloseTo(5);
+			expect(rotated.points()[1].y()).toBeCloseTo(5);
 		});
 	});
 
@@ -128,6 +155,48 @@ describe("Polyline", () => {
 		});
 	});
 
+	describe("boundingBox", () => {
+		it("should return bounding box for three points", () => {
+			const polyline = new Polyline([new Point(0, 0), new Point(10, 20), new Point(5, 10)]);
+			const box = polyline.boundingBox();
+
+			expect(box.topLeft().x()).toBe(0);
+			expect(box.topLeft().y()).toBe(0);
+			expect(box.width()).toBe(10);
+			expect(box.height()).toBe(20);
+		});
+
+		it("should return empty bounding box for empty polyline", () => {
+			const polyline = new Polyline([]);
+			const box = polyline.boundingBox();
+
+			expect(box.topLeft().x()).toBe(0);
+			expect(box.topLeft().y()).toBe(0);
+			expect(box.width()).toBe(0);
+			expect(box.height()).toBe(0);
+		});
+
+		it("should return zero-size bounding box for single point", () => {
+			const polyline = new Polyline([new Point(5, 10)]);
+			const box = polyline.boundingBox();
+
+			expect(box.topLeft().x()).toBe(5);
+			expect(box.topLeft().y()).toBe(10);
+			expect(box.width()).toBe(0);
+			expect(box.height()).toBe(0);
+		});
+
+		it("should handle negative coordinates", () => {
+			const polyline = new Polyline([new Point(-10, -20), new Point(5, 10), new Point(-5, 0)]);
+			const box = polyline.boundingBox();
+
+			expect(box.topLeft().x()).toBe(-10);
+			expect(box.topLeft().y()).toBe(-20);
+			expect(box.width()).toBe(15);
+			expect(box.height()).toBe(30);
+		});
+	});
+
 	describe("center", () => {
 		it("should calculate center between first and last point", () => {
 			const polyline = new Polyline([new Point(0, 0), new Point(10, 10), new Point(20, 0)]);
@@ -148,6 +217,13 @@ describe("Polyline", () => {
 
 			expect(polyline.center().x()).toBe(5);
 			expect(polyline.center().y()).toBe(5);
+		});
+
+		it("should return origin for empty polyline", () => {
+			const polyline = new Polyline([]);
+
+			expect(polyline.center().x()).toBe(0);
+			expect(polyline.center().y()).toBe(0);
 		});
 	});
 

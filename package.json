@@ -1,5 +1,5 @@
 {
-  "name": "abstract-rotary-tool",
+  "name": "abstract-geometry-tool",
   "version": "0.0.1",
   "description": "A lightweight TypeScript library for 2D box geometry with rotation and reflection support",
   "main": "dist/index.js",
