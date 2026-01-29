@@ -45,11 +45,17 @@ export class Polyline implements Shape {
 
 	rotated(angleDegrees: number, center?: Point): Polyline {
 		const rotationCenter = center ?? this.center();
-		return new Polyline(this._points.map((point) => point.rotated(angleDegrees, rotationCenter)), this._rotation + angleDegrees);
+		return new Polyline(
+			this._points.map((point) => point.rotated(angleDegrees, rotationCenter)),
+			this._rotation + angleDegrees,
+		);
 	}
 
 	reflected(axis: Segment): Polyline {
-		return new Polyline(this._points.map((point) => point.reflected(axis.start(), axis.end())), this._rotation);
+		return new Polyline(
+			this._points.map((point) => point.reflected(axis.start(), axis.end())),
+			this._rotation,
+		);
 	}
 
 	reflectedByHorizontal(centered?: boolean): Polyline {

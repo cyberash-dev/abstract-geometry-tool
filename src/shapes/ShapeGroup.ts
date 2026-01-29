@@ -52,13 +52,12 @@ export class ShapeGroup implements Shape {
 		const worldMinY = Math.min(...allCorners.map((p) => p.y()));
 		const worldMaxY = Math.max(...allCorners.map((p) => p.y()));
 
-		const groupCenter = new Point(
-			(worldMinX + worldMaxX) / 2,
-			(worldMinY + worldMaxY) / 2
-		);
+		const groupCenter = new Point((worldMinX + worldMaxX) / 2, (worldMinY + worldMaxY) / 2);
 
 		if (this._rotation !== 0) {
-			const rotatedBack = allCorners.map((corner) => corner.rotated(-this._rotation, groupCenter));
+			const rotatedBack = allCorners.map((corner) =>
+				corner.rotated(-this._rotation, groupCenter),
+			);
 			const minX = Math.min(...rotatedBack.map((p) => p.x()));
 			const maxX = Math.max(...rotatedBack.map((p) => p.x()));
 			const minY = Math.min(...rotatedBack.map((p) => p.y()));
@@ -66,17 +65,19 @@ export class ShapeGroup implements Shape {
 
 			return new BoundingBox(new Point(minX, minY), maxX - minX, maxY - minY, this._rotation);
 		} else {
-			return new BoundingBox(new Point(worldMinX, worldMinY), worldMaxX - worldMinX, worldMaxY - worldMinY, this._rotation);
+			return new BoundingBox(
+				new Point(worldMinX, worldMinY),
+				worldMaxX - worldMinX,
+				worldMaxY - worldMinY,
+				this._rotation,
+			);
 		}
 	}
 
 	center(): Point {
 		const box = this.boundingBox();
 
-		return new Point(
-			box.topLeft().x() + box.width() / 2,
-			box.topLeft().y() + box.height() / 2,
-		);
+		return new Point(box.topLeft().x() + box.width() / 2, box.topLeft().y() + box.height() / 2);
 	}
 
 	rotation(): number {
@@ -87,25 +88,34 @@ export class ShapeGroup implements Shape {
 		const rotationCenter = center ?? this.center();
 		return new ShapeGroup(
 			this._shapes.map((shape) => shape.rotated(angleDegrees, rotationCenter)),
-			this._rotation + angleDegrees
+			this._rotation + angleDegrees,
 		);
 	}
 
 	reflected(axis: Segment): ShapeGroup {
-		return new ShapeGroup(this._shapes.map((shape) => shape.reflected(axis)), this._rotation);
+		return new ShapeGroup(
+			this._shapes.map((shape) => shape.reflected(axis)),
+			this._rotation,
+		);
 	}
 
 	reflectedByHorizontal(centered?: boolean): ShapeGroup {
 		const axisY = centered !== false ? this.center().y() : 0;
 		const axis = new Segment(new Point(0, axisY), new Point(1, axisY));
 
-		return new ShapeGroup(this._shapes.map((shape) => shape.reflected(axis)), this._rotation);
+		return new ShapeGroup(
+			this._shapes.map((shape) => shape.reflected(axis)),
+			this._rotation,
+		);
 	}
 
 	reflectedByVertical(centered?: boolean): ShapeGroup {
 		const axisX = centered !== false ? this.center().x() : 0;
 		const axis = new Segment(new Point(axisX, 0), new Point(axisX, 1));
 
-		return new ShapeGroup(this._shapes.map((shape) => shape.reflected(axis)), this._rotation);
+		return new ShapeGroup(
+			this._shapes.map((shape) => shape.reflected(axis)),
+			this._rotation,
+		);
 	}
 }

@@ -57,7 +57,6 @@ describe("Rectangle", () => {
 		});
 	});
 
-
 	describe("rotated", () => {
 		it("should preserve dimensions when rotated (Transform approach)", () => {
 			const rect = new Rectangle(new Point(0, 0), new Point(10, 20));

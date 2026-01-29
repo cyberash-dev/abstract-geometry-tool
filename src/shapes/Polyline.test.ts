@@ -187,7 +187,11 @@ describe("Polyline", () => {
 		});
 
 		it("should handle negative coordinates", () => {
-			const polyline = new Polyline([new Point(-10, -20), new Point(5, 10), new Point(-5, 0)]);
+			const polyline = new Polyline([
+				new Point(-10, -20),
+				new Point(5, 10),
+				new Point(-5, 0),
+			]);
 			const box = polyline.boundingBox();
 
 			expect(box.topLeft().x()).toBe(-10);

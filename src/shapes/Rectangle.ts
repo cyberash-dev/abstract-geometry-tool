@@ -14,8 +14,17 @@ export class Rectangle implements Shape {
 		this._rotation = rotation;
 	}
 
-	static fromTopLeftPointAndSize(topLeft: Point, width: number, height: number, rotation: number = 0): Rectangle {
-		return new Rectangle(topLeft, new Point(topLeft.x() + width, topLeft.y() + height), rotation);
+	static fromTopLeftPointAndSize(
+		topLeft: Point,
+		width: number,
+		height: number,
+		rotation: number = 0,
+	): Rectangle {
+		return new Rectangle(
+			topLeft,
+			new Point(topLeft.x() + width, topLeft.y() + height),
+			rotation,
+		);
 	}
 
 	center(): Point {
@@ -25,25 +34,25 @@ export class Rectangle implements Shape {
 		);
 	}
 
-    topLeft(): Point {
-        return this.topLeftPoint;
-    }
+	topLeft(): Point {
+		return this.topLeftPoint;
+	}
 
-    bottomRight(): Point {
-        return this.bottomRightPoint;
-    }
+	bottomRight(): Point {
+		return this.bottomRightPoint;
+	}
 
-    width(): number {
-        return this.bottomRightPoint.x() - this.topLeftPoint.x();
-    }
+	width(): number {
+		return this.bottomRightPoint.x() - this.topLeftPoint.x();
+	}
 
-    height(): number {
-        return this.bottomRightPoint.y() - this.topLeftPoint.y();
-    }
+	height(): number {
+		return this.bottomRightPoint.y() - this.topLeftPoint.y();
+	}
 
-    boundingBox(): BoundingBox {
-        return new BoundingBox(this.topLeftPoint, this.width(), this.height(), this._rotation);
-    }
+	boundingBox(): BoundingBox {
+		return new BoundingBox(this.topLeftPoint, this.width(), this.height(), this._rotation);
+	}
 
 	rotation(): number {
 		return this._rotation;
@@ -82,11 +91,15 @@ export class Rectangle implements Shape {
 
 	reflectedByHorizontal(centered: boolean = true): Rectangle {
 		const axisY = centered ? this.center().y() : 0;
-		return this.reflected(new Segment(new Point(0, axisY), new Point(1, axisY), this._rotation));
+		return this.reflected(
+			new Segment(new Point(0, axisY), new Point(1, axisY), this._rotation),
+		);
 	}
 
 	reflectedByVertical(centered: boolean = true): Rectangle {
 		const axisX = centered ? this.center().x() : 0;
-		return this.reflected(new Segment(new Point(axisX, 0), new Point(axisX, 1), this._rotation));
+		return this.reflected(
+			new Segment(new Point(axisX, 0), new Point(axisX, 1), this._rotation),
+		);
 	}
 }
