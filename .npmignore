@@ -1,0 +1,15 @@
+src/
+node_modules/
+coverage/
+*.log
+.DS_Store
+.npmrc
+.gitignore
+.prettierrc
+biome.json
+eslint.config.mjs
+jest.config.js
+tsconfig.json
+*.test.ts
+.git/
+.github/

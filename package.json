@@ -1,19 +1,22 @@
 {
   "name": "abstract-geometry-tool",
-  "version": "0.0.1",
-  "description": "A lightweight TypeScript library for 2D box geometry with rotation and reflection support",
+  "version": "1.0.0",
+  "description": "A lightweight TypeScript library for 2D geometry operations with rotation and reflection support",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
-    "dist"
+    "dist",
+    "README.md"
   ],
   "scripts": {
     "build": "tsc",
     "prepare": "npm run build",
     "test": "jest",
+    "test:coverage": "jest --coverage",
     "lint": "biome check src/",
     "lint:fix": "biome check --write src/",
-    "format": "biome format --write src/"
+    "format": "biome format --write src/",
+    "prepublishOnly": "npm test && npm run lint && npm run build"
   },
   "keywords": [
     "geometry",
@@ -23,11 +26,28 @@
     "bounding-box",
     "point",
     "segment",
+    "polyline",
+    "rectangle",
+    "shape",
     "transform",
-    "typescript"
+    "typescript",
+    "immutable",
+    "graphics",
+    "cad"
   ],
   "author": "email@cyberash.dev",
   "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cyberash-dev/abstract-geometry-tool.git"
+  },
+  "bugs": {
+    "url": "https://github.com/cyberash-dev/abstract-geometry-tool/issues"
+  },
+  "homepage": "https://github.com/cyberash-dev/abstract-geometry-tool#readme",
+  "engines": {
+    "node": ">=18.0.0"
+  },
   "devDependencies": {
     "@biomejs/biome": "2.3.10",
     "@types/jest": "30.0.0",

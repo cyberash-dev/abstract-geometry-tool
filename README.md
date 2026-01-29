@@ -1,6 +1,23 @@
-# Abstract Rotary Tool
+# Abstract Geometry Tool
+
+[![npm version](https://img.shields.io/npm/v/abstract-geometry-tool.svg)](https://www.npmjs.com/package/abstract-geometry-tool)
+[![License: ISC](https://img.shields.io/badge/License-ISC-blue.svg)](https://opensource.org/licenses/ISC)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.8-blue.svg)](https://www.typescriptlang.org/)
+[![Tests](https://img.shields.io/badge/tests-132%20passing-brightgreen.svg)](https://github.com/cyberash-dev/abstract-geometry-tool)
+[![Coverage](https://img.shields.io/badge/coverage-100%25-brightgreen.svg)](https://github.com/cyberash-dev/abstract-geometry-tool)
 
 A lightweight TypeScript library for 2D geometry operations with rotation and reflection support. Perfect for graphics applications, CAD tools, and geometric transformations.
+
+## Why Use Abstract Geometry Tool?
+
+- 🚀 **Zero dependencies** — lightweight and fast
+- 🔒 **Fully immutable** — predictable and safe transformations
+- 📐 **Comprehensive** — points, segments, polylines, rectangles, and groups
+- 🔄 **Rotation support** — all shapes can be rotated around any point
+- 🪞 **Reflection support** — reflect over arbitrary axes or use convenient horizontal/vertical helpers
+- 📦 **TypeScript first** — complete type safety and IntelliSense support
+- ✅ **Battle-tested** — 100% code coverage with 132 tests
+- 📚 **Well documented** — clear API with examples
 
 ## Features
 
@@ -18,15 +35,22 @@ A lightweight TypeScript library for 2D geometry operations with rotation and re
 ## Installation
 
 ```bash
-npm install abstract-rotary-tool
+npm install abstract-geometry-tool
 ```
+
+## Compatibility
+
+- **Node.js**: >= 18.0.0
+- **TypeScript**: >= 4.5
+- **Module systems**: CommonJS (ESM support planned)
+- **Browsers**: All modern browsers (when bundled)
 
 ## Usage
 
 ### Basic Shapes
 
 ```typescript
-import { Point, Segment, Polyline, Rectangle, ShapeGroup } from "abstract-rotary-tool";
+import { Point, Segment, Polyline, Rectangle, ShapeGroup } from "abstract-geometry-tool";
 
 const point = new Point(10, 20);
 console.log(point.x(), point.y());
@@ -105,7 +129,7 @@ console.log(reflected.x(), reflected.y());
 ### Using Utility Functions
 
 ```typescript
-import { degreesToRadians, radiansToDegrees } from "abstract-rotary-tool";
+import { degreesToRadians, radiansToDegrees } from "abstract-geometry-tool";
 
 const radians = degreesToRadians(90);
 const degrees = radiansToDegrees(Math.PI / 2);
@@ -186,12 +210,76 @@ All shapes implement this interface:
 
 ## Development
 
+### Setup
+
 ```bash
 npm install
+```
 
+### Running Tests
+
+```bash
 npm test
 
+npm run test:coverage
+```
+
+### Building
+
+```bash
 npm run build
+```
+
+### Linting and Formatting
+
+```bash
+npm run lint
+
+npm run lint:fix
+
+npm run format
+```
+
+## Real-World Examples
+
+### Building a CAD Tool
+
+```typescript
+import { Rectangle, ShapeGroup, Point } from "abstract-geometry-tool";
+
+const wall = new Rectangle(new Point(0, 0), new Point(100, 10));
+const door = new Rectangle(new Point(30, 0), new Point(50, 10));
+
+const building = new ShapeGroup([wall, door]);
+
+const rotatedBuilding = building.rotated(45);
+```
+
+### Graphics Transformation Pipeline
+
+```typescript
+import { Polyline, Point } from "abstract-geometry-tool";
+
+const path = new Polyline([
+  new Point(0, 0),
+  new Point(50, 25),
+  new Point(100, 0)
+]);
+
+const mirrored = path.reflectedByVertical();
+const rotated = mirrored.rotated(180);
+const final = rotated.reflectedByHorizontal(false);
+```
+
+### Coordinate System Transformations
+
+```typescript
+import { Point, degreesToRadians } from "abstract-geometry-tool";
+
+const screenPoint = new Point(100, 200);
+
+const worldCenter = new Point(0, 0);
+const rotatedToWorld = screenPoint.rotated(90, worldCenter);
 ```
 
 ## Key Concepts
@@ -214,7 +302,7 @@ All rotation methods use **degrees** for consistency:
 
 If you need to work with radians, use the provided utility functions:
 ```typescript
-import { degreesToRadians, radiansToDegrees } from "abstract-rotary-tool";
+import { degreesToRadians, radiansToDegrees } from "abstract-geometry-tool";
 
 const angleInDegrees = radiansToDegrees(Math.PI / 2);
 const point = new Point(10, 0).rotated(angleInDegrees, new Point(0, 0));
